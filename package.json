@@ -1,0 +1,55 @@
+{
+  "name": "solidity-ts-dev-stack-example",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "copy-to-frontend":"cp -R ./artifacts ./frontend/src/artifacts && cp -R ./typechain ./frontend/src/typechain",
+    "build": "npm run clean && npm run compile",
+    "clean": "npx hardhat clean",
+    "compile": "npx hardhat compile && npm run copy-to-frontend",
+    "test": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat test",
+    "coverage": "npm run build && npx hardhat coverage --temp artifacts --network coverage",
+    "run-local-hh": "npx hardhat run scripts/run/main.ts",
+    "run-local-ts": "ts-node --files scripts/run/main.ts",
+    "deploy-rinkeby": "npx hardhat run scripts/deploy.ts --network rinkeby",
+    "deploy-ganache": "npx hardhat run scripts/deploy.ts --network ganache",
+    "verify-rinkeby": "npx hardhat verify 0x0A88770D11C9c83ef1911F5cB2a6F634670e29F1  --network rinkeby"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhlsthrm/solidity-ts-dev-stack-example.git"
+  },
+  "author": "rhlsthrm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rhlsthrm/solidity-ts-dev-stack-example/issues"
+  },
+  "homepage": "https://github.com/rhlsthrm/solidity-ts-dev-stack-example#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-etherscan": "^2.1.8",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@typechain/ethers-v5": "^7.0.0",
+    "@typechain/hardhat": "^2.0.0",
+    "@types/chai": "^4.2.18",
+    "@types/chai-as-promised": "^7.1.1",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.0.3",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^9.0.2",
+    "ethereum-waffle": "^3.3.0",
+    "ethers": "^5.1.4",
+    "hardhat": "^2.2.1",
+    "solidity-coverage": "^0.7.16",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^9.1.1",
+    "typechain": "^5.0.0",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.4.1",
+    "yaml-to-env": "^4.2.3"
+  }
+}
