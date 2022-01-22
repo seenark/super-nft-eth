@@ -51,7 +51,7 @@ describe("SuperNFT", () => {
     CSuperNFT = await FSuperNFT.deploy(env.NFT.name, env.NFT.symbol) as SuperNFT
     await CSuperNFT.deployed()
 
-    const FExchange = await ethers.getContractFactory("Exchange") as Exchange__factory
+    const FExchange = await ethers.getContractFactory(ExchangeName) as Exchange__factory
     CExchange = await FExchange.deploy(CSuperToken.address, CSuperNFT.address)
     await CExchange.deployed()
     tx = await CSuperNFT.setExchangeAddress(CExchange.address)
@@ -222,5 +222,88 @@ describe("SuperNFT", () => {
     })
   })
 
+  describe("direct buy from token", async () => {
+    beforeEach(async () => {
+      // mint from owner
+      tx = await CSuperNFT.createNFT("abc");
+      await tx.wait();
+      // mint from owner 2
+      tx = await CSuperNFT.createNFT("def");
+      await tx.wait();
+
+      // owner sell on exchange
+      tx = await CSuperNFT.setApprovalForAll(CExchange.address, true)
+      await tx.wait()
+
+      // sell token1
+      tx = await CExchange.sell(1,1 * 1e8)
+      await tx.wait()
+      // sell token2
+      tx = await CExchange.sell(2,1 * 1e8)
+      await tx.wait()
+
+      // person1 approve
+      tx = await CSuperToken.connect(person1).approve(CExchange.address, 1 * 1e8)
+      await tx.wait()
+    })
+
+      it("person1 -> direct buy from token", async () => {
+        // expect(console.log("openForTrades", await CExchange.getAllNFTOpenForTrades()))
+        // expect(console.log("owner of token id 1: ", (await CSuperNFT.ownerOf(1)).toString()))
+        let allNFTOpenForTrades = await CExchange.getAllNFTOpenForTrades()
+        expect(allNFTOpenForTrades.length).to.equal(2)
+        tx = await CExchange.connect(person1).directBuyCo2FromToken(1)
+        await tx.wait()
+        // expect(console.log("used nfts", await CExchange.getUsedNFTs()))
+        const p1Balance = await CSuperToken.balanceOf(person1.address)
+        expect(p1Balance.toNumber()/1e8).to.equal(99)
+        allNFTOpenForTrades = await CExchange.getAllNFTOpenForTrades()
+        expect(allNFTOpenForTrades.length).to.equal(1)
+        const usedNFT = await CExchange.usedNFTs(0)
+        // expect(console.log("used nft: ", usedNFT))
+        expect(usedNFT.customer).to.equal(person1.address)
+        expect(usedNFT.tokenId).to.equal(1)
+        // check owner should be reject because it already burned
+        expect(CSuperNFT.ownerOf(1)).to.rejected
+      })
+  })
+
+  describe.only("direct buy co2 from nft", () => {
+    beforeEach(async () => {
+       // mint from owner
+       tx = await CSuperNFT.createNFT("abc");
+       await tx.wait();
+ 
+       // owner sell on exchange
+       tx = await CSuperNFT.approve(CExchange.address, 1)
+       await tx.wait()
+       // sell token1
+       tx = await CExchange.sell(1,1 * 1e8)
+       await tx.wait()
+ 
+       // person1 approve
+       tx = await CSuperToken.connect(person1).approve(CExchange.address, 1 * 1e8)
+       await tx.wait()
+
+       // person1 buy from exchange
+       tx = await CExchange.connect(person1).buy(1)
+       await tx.wait()
+        // set approve for all to allow exchange transfer nft for person1
+       tx = await CSuperNFT.connect(person1).setApprovalForAll(CExchange.address, true);
+       await tx.wait()
+    })
+
+
+    it("person1 nft -> exchange -> co2 credit",async () => {
+      tx = await CExchange.connect(person1).transformNFTToCo2Credit(1)
+
+      await tx.wait()
+      expect(console.log("used nft", await CExchange.getUsedNFTs()))
+      const usedNft = await CExchange.usedNFTs(0);
+      expect(usedNft.customer).to.equal(person1.address)
+      expect(usedNft.tokenId).to.equal(1)
+      expect(CSuperNFT.ownerOf(1)).to.rejected
+    })
+  })
 
 });

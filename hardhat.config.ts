@@ -35,6 +35,14 @@ const config: HardhatUserConfig = {
     coverage: {
       url: "http://127.0.0.1:8555", // Coverage launches its own ganache-cli client
     },
+    fuji: {
+      url: 'https://api.avax-test.network/ext/bc/C/rpc',
+      gasPrice: 225000000000,
+      chainId: 43113,
+      accounts: [
+        "9307874dde653ce1c61f6af18a328073599b61f16f1dece43bd14b30e9fbf388"
+      ]
+    },
   },
   etherscan: {
     // Your API key for Etherscan

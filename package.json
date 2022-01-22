@@ -7,14 +7,15 @@
     "copy-to-frontend":"cp -R ./artifacts ./frontend/src/artifacts && cp -R ./typechain ./frontend/src/typechain",
     "build": "npm run clean && npm run compile",
     "clean": "npx hardhat clean",
-    "compile": "npx hardhat compile && npm run copy-to-frontend",
+    "compile": "npx hardhat compile",
     "test": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat test",
     "coverage": "npm run build && npx hardhat coverage --temp artifacts --network coverage",
     "run-local-hh": "npx hardhat run scripts/run/main.ts",
     "run-local-ts": "ts-node --files scripts/run/main.ts",
     "deploy-rinkeby": "npx hardhat run scripts/deploy.ts --network rinkeby",
     "deploy-ganache": "npx hardhat run scripts/deploy.ts --network ganache",
-    "verify-rinkeby": "npx hardhat verify 0x0A88770D11C9c83ef1911F5cB2a6F634670e29F1  --network rinkeby"
+    "deploy-fuji": "npx hardhat run scripts/deploy.ts --network fuji",
+    "verify-rinkeby": "npx hardhat verify --network rinkeby ----constructor-args scripts/verify/nft.ts 0xfcCC0f589836394F64567D1f170413e580eb57d3"
   },
   "repository": {
     "type": "git",
