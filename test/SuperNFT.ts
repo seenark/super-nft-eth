@@ -18,7 +18,7 @@ const SuperNFTName = "SuperNFT";
 const SuperTokenName = "SuperToken"
 const ExchangeName = "Exchange"
 
-describe("SuperNFT", () => {
+describe.skip("SuperNFT", () => {
   let CSuperNFT: SuperNFT;
   let CSuperToken: SuperToken;
   let CExchange: Exchange;
@@ -268,7 +268,7 @@ describe("SuperNFT", () => {
       })
   })
 
-  describe.only("direct buy co2 from nft", () => {
+  describe("direct buy co2 from nft", () => {
     beforeEach(async () => {
        // mint from owner
        tx = await CSuperNFT.createNFT("abc");

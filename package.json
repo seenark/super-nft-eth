@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "copy-to-frontend":"cp -R ./artifacts ./frontend/src/artifacts && cp -R ./typechain ./frontend/src/typechain",
     "build": "npm run clean && npm run compile",
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
@@ -15,7 +14,11 @@
     "deploy-rinkeby": "npx hardhat run scripts/deploy.ts --network rinkeby",
     "deploy-ganache": "npx hardhat run scripts/deploy.ts --network ganache",
     "deploy-fuji": "npx hardhat run scripts/deploy.ts --network fuji",
-    "verify-rinkeby": "npx hardhat verify --network rinkeby ----constructor-args scripts/verify/nft.ts 0xfcCC0f589836394F64567D1f170413e580eb57d3"
+    "verify-rinkeby": "npx hardhat verify --network rinkeby ----constructor-args scripts/verify/nft.ts 0xfcCC0f589836394F64567D1f170413e580eb57d3",
+    "copy-artifacts": "cp -R artifacts ../super-frontend/contracts/artifacts",
+    "copy-typechain": "cp -R typechain ../super-frontend/contracts/typechain",
+    "copy-deployed": "cp deployed.json ../super-frontend/contracts/deployed.json",
+    "copy-to-frontend": "npm run copy-artifacts && npm run copy-typechain && npm run copy-deployed"
   },
   "repository": {
     "type": "git",

@@ -20,6 +20,14 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [{ version: "0.8.0", settings: {} }],
   },
+  paths: {
+    // root: string;
+    // configFile: string;
+    // cache: string;
+    // artifacts: string;
+    // sources: string;
+    // tests: string;
+  },
   networks: {
     hardhat: {},
     localhost: {
